@@ -1,5 +1,9 @@
 const getUsers = require("./modules/users");
 const http = require("http");
+const express = require("express");
+const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const server = http.createServer((request, response) => {
   const url = new URL(request.url, "http://127.0.0.1");
