@@ -1,9 +1,17 @@
 const getUsers = require("./modules/users");
 const http = require("http");
+
 const express = require("express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const mongoose = require("mongoose");
+
+const {
+  PORT = 3000,
+  API_URL = "http://127.0.0.1",
+  MONGODB_URI = "",
+} = process.env;
 
 const server = http.createServer((request, response) => {
   const url = new URL(request.url, "http://127.0.0.1");
@@ -45,3 +53,6 @@ const server = http.createServer((request, response) => {
 server.listen(3003, () => {
   console.log("Server was started at http://127.0.0.1:3003");
 });
+
+const app = express();
+app.use(cors());
