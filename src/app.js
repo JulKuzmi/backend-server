@@ -1,58 +1,43 @@
-const getUsers = require("./modules/users");
-const http = require("http");
-
 const express = require("express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const userRouter = require("./routes/users");
+const bookRouter = require("./routes/books");
+const actionRouter = require("./routes/action");
+
+const logger = require("./middlewares/logger");
+
+dotenv.config();
 const {
   PORT = 3000,
   API_URL = "http://127.0.0.1",
   MONGODB_URI = "",
 } = process.env;
 
-const server = http.createServer((request, response) => {
-  const url = new URL(request.url, "http://127.0.0.1");
-  const query = url.searchParams;
-
-  if (query.toString() !== "") {
-    if (query.has("hello")) {
-      const name = query.get("hello");
-      if (name) {
-        response.writeHead(200, { "Content-Type": "text/plain" });
-        response.end(`Hello, ${name}!`);
-
-        return;
-      } else {
-        response.writeHead(400, { "Content-Type": "text/plain" });
-        response.end("Enter a name");
-
-        return;
-      }
-    } else {
-      response.writeHead(500);
-      response.end();
-
-      return;
-    }
-  }
-
-  if (url.pathname === "/users") {
-    response.writeHead(200, { "Content-Type": "application/json" });
-    response.end(getUsers());
-
-    return;
-  }
-
-  response.writeHead(200, { "Content-Type": "text/plain" });
-  response.end("Hello, World!");
-});
-
-server.listen(3003, () => {
-  console.log("Server was started at http://127.0.0.1:3003");
-});
+mongoose
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Подключен к MongoDB");
+  })
+  .catch((error) => {
+    console.error("ошибка соединения MongoDB:", error);
+  });
 
 const app = express();
+
 app.use(cors());
+app.use(logger);
+app.use(bodyParser.json());
+app.use(userRouter);
+app.use(bookRouter);
+app.use(actionRouter);
+
+app.listen(PORT, () => {
+  console.log(`Сервер был запущен на ${API_URL}:${PORT}`);
+});
