@@ -12,9 +12,9 @@ const logger = require("./middlewares/logger");
 
 dotenv.config();
 const {
-  PORT = 3000,
+  PORT = 3005,
   API_URL = "http://127.0.0.1",
-  MONGODB_URI = "",
+  MONGO_URL = "mongodb://127.0.0.1:27017/backend",
 } = process.env;
 
 mongoose
