@@ -23,10 +23,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Подключен к MongoDB");
+    console.log("Connected to MongoDB");
   })
   .catch((error) => {
-    console.error("ошибка соединения MongoDB:", error);
+    console.error("Error connecting to MongoDB:", error);
   });
 
 const app = express();
@@ -39,5 +39,5 @@ app.use(bookRouter);
 app.use(actionRouter);
 
 app.listen(PORT, () => {
-  console.log(`Сервер был запущен на ${API_URL}:${PORT}`);
+  console.log(`Server was started at ${API_URL}:${PORT}`);
 });
